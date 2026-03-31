@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>NPI_Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+          --bg: #0b1020;
+          --card: #111833;
+          --header-bg: #161b22;
+          --border-color: rgba(255, 255, 255, .1);
+          --muted: #97a3b6;
+          --text: #e8ecf6;
+
+          /* Shining Light Blue Theme (Default) */
+          --accent1: #29B6F6;      /* Main light blue for borders, active states */
+          --accent2: #81D4FA;      /* Lighter blue for hovers, text */
+          --logo-color: #29B6F6;   /* Logo color */
+          --glow-color-rgba: rgba(41, 182, 246, 0.4); /* RGBA version for glows */
+
+          --nav-accent1: var(--accent1);
+          --nav-accent2: var(--accent2);
+          --nav-glow-color-rgba: var(--glow-color-rgba);
+
+          /* NPI Palette */
+          --quiet: #34d399;
+          --moderate: #facc15;
+          --loud: #fb923c;
+          --very-loud: #ef4444;
+          --harmful: #a855f7;
+        }
+        *{ box-sizing: border-box; }
+        body {
+          margin: 0;
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+          background: linear-gradient(120deg, #0b1020 0%, #0e1430 60%, #151a3a 100%);
+          color: var(--text);
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+        }
+         main {
+          flex: 1;
+         }
+
+        /* --- Restored & Themed Header/Nav Styles --- */
+        .site-nav {
+          background-color: var(--header-bg);
+          border-bottom: 1px solid var(--border-color);
+          padding: 12px 24px;
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          backdrop-filter: blur(6px);
+          background: rgba(22, 27, 34, .7);
+        }
+        .nav-container {
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          align-items: center;
+          width: 100%;
+          gap: 1rem;
+        }
+        .logo {
+          grid-column: 1 / 2;
+          justify-self: start;
+          font-size: 24px;
+          font-weight: 700;
+          color: var(--logo-color);
+          text-decoration: none;
+          transition: filter 0.2s ease;
+        }
+        .logo:hover {
+          filter: brightness(1.2);
+        }
+        .nav-controls {
+          grid-column: 2 / 3;
+          justify-self: center;
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+        .nav-search {
+            grid-column: 3 / 4;
+            justify-self: end;
+        }
+        .toggle-btn-group {
+          display: inline-flex;
+          border-radius: 20px;
+          overflow: hidden;
+          border: 1px solid var(--nav-accent1);
+          box-shadow: 0 0 8px 2px var(--nav-glow-color-rgba);
+        }
+        .toggle-btn {
+          padding: 6px 16px;
+          font-weight: 500;
+          transition: all 0.2s ease-in-out;
+          background-color: transparent;
+          color: var(--nav-accent2);
+          border: none;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          text-decoration: none;
+        }
+        .toggle-btn:not(:last-child) {
+          border-right: 1px solid var(--nav-accent1);
+        }
+        .toggle-btn.active {
+          background-color: var(--nav-accent1);
+          color: #FFFFFF;
+        }
+        .toggle-btn:hover:not(.active) {
+          background-color: rgba(41, 182, 246, 0.2);
+          color: white;
+        }
+         .nav-btn {
+          cursor: pointer;
+          border: 1px solid var(--nav-accent1);
+          color: var(--nav-accent2);
+          padding: 8px 14px;
+          border-radius: 20px;
+          background: transparent;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          transition: all 0.2s ease;
+          font-weight: 500;
+          white-space: nowrap;
+          text-decoration: none;
+        }
+         .nav-btn:hover {
+            background-color: rgba(41, 182, 246, 0.2);
+            color: white;
+            box-shadow: 0 0 8px 2px var(--nav-glow-color-rgba);
+        }
+
+        /* Search Form */
+        .search-form {
+            position: relative;
+        }
+        .search-form input {
+          border-radius: 20px;
+          padding-left: 15px;
+          padding-right: 45px;
+          background-color: rgba(255, 255, 255, .05);
+          border: 1px solid rgba(255, 255, 255, 0.5);
+          color: white;
+          transition: all 0.2s ease-in-out;
+          height: 38px;
+        }
+        .search-form input:focus {
+            border-color: var(--accent1);
+            background-color: white;
+            color: var(--card);
+            outline: none;
+            box-shadow: none;
+        }
+        .search-form input::placeholder {
+            color: var(--muted);
+        }
+        .search-form button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background-color: var(--nav-accent1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .search-form button:hover {
+            background-color: #0091ea;
+        }
+
+
+        /* --- Main Content Styles --- */
+        main { padding: 20px 24px 40px; }
+        
+        .filter-btn-separate {
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .1);
+            color: var(--muted);
+            padding: 8px 18px;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .filter-btn-separate:hover {
+            background: rgba(255, 255, 255, .1);
+            border-color: rgba(255, 255, 255, .2);
+            color: var(--text);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn-separate.active {
+            background: rgba(255, 255, 255, .05);
+            border: 2px solid var(--accent1);
+            color: var(--accent2);
+            padding: 7px 17px;
+            font-weight: 600;
+            box-shadow: 4px 4px 12px -4px var(--glow-color-rgba), -4px 4px 12px -4px var(--glow-color-rgba);
+        }
+
+        .hero-header {
+            position: relative;
+            text-align: center;
+            color: white;
+            border-radius: 18px;
+            overflow: hidden;
+            margin: 0 auto 24px;
+            width: 100%;
+            height: 350px;
+        }
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.6);
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+        }
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.5);
+        }
+
+        .content-box {
+          background: var(--card);
+          padding: 30px;
+          border-radius: 18px;
+          border: 1px solid var(--border-color);
+          box-shadow: 0 8px 30px rgba(0,0,0,.25);
+          margin-bottom: 24px;
+        }
+
+        /* Live NPI Container */
+        .live-npi-container h2 {
+            color: white;
+            border: none;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        .live-npi-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, var(--accent1), var(--accent2));
+        }
+        .npi-main-info {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .npi-value {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .npi-value small {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--muted);
+        }
+        .npi-status-wrapper span {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .npi-status-box {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .noise-source-info {
+            font-size: 1.1rem;
+            margin-bottom: 35px;
+        }
+        .npi-scale-wrapper {
+            position: relative;
+            padding-bottom: 25px;
+        }
+        .npi-scale {
+            height: 10px;
+            border-radius: 5px;
+            display: flex;
+            overflow: hidden;
+        }
+        .npi-scale-segment {
+            height: 100%;
+        }
+        .npi-scale-pointer {
+            position: absolute;
+            top: -3px;
+            width: 16px;
+            height: 16px;
+            background-color: white;
+            border-radius: 50%;
+            border: 2px solid var(--card);
+            transform: translateX(-50%);
+            transition: left 0.5s ease-in-out;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+        .npi-scale-labels {
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+        .npi-scale-labels span {
+            position: absolute;
+            transform: translateX(-50%);
+        }
+        .npi-scale-labels span:first-child { transform: translateX(0); }
+        .npi-scale-labels span:last-child { transform: translateX(-100%); }
+
+        /* Chart & Educational Sections */
+        h1, h2, h3, h4 {
+          color: var(--text);
+          font-weight: 600;
+        }
+        .edu-section h2 {
+          border-bottom: 2px solid var(--accent1);
+          padding-bottom: 10px;
+          margin-top: 2rem;
+          margin-bottom: 1.5rem;
+          font-size: 1.7rem;
+        }
+        .edu-section { display: none; }
+        .edu-section.active { display: block; }
+
+        /* Chart Header */
+        .chart-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .chart-header h4 {
+            color: white;
+            font-size: 2.2rem;
+        }
+        #chart-timeframe-title,
+        .gradient-text {
+            display: inline-block;
+            perspective: 1000px;
+            background: linear-gradient(to right, var(--accent1), var(--accent2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        #chart-timeframe-title.flipping {
+            animation: flip-box 0.6s ease-in-out;
+        }
+        @keyframes flip-box {
+            0% { transform: rotateX(0deg); }
+            50% { transform: rotateX(-90deg); }
+            100% { transform: rotateX(0deg); }
+        }
+
+        /* Table styles */
+        .table-wrapper {
+            overflow-x:auto;
+            border-radius:14px;
+            margin-top: 10px;
+            border: 1px solid var(--border-color);
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          background: rgba(255, 255, 255, .03);
+        }
+        thead th {
+          font-size: 12px;
+          text-align: left;
+          color: #b7c3d6;
+          background: rgba(255, 255, 255, .04);
+        }
+        th, td {
+          padding: 12px 10px;
+          border-bottom: 1px solid rgba(255, 255, 255, .06);
+          font-size: 13px;
+        }
+        tbody tr:hover { background: rgba(255, 255, 255, .03); }
+
+        /* Footer Styles */
+        .site-footer {
+            background-color: var(--header-bg);
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+        }
+        .site-footer p {
+            margin: 0;
+            color: var(--muted);
+        }
+        .site-footer a {
+            color: var(--accent1);
+            text-decoration: none;
+            margin: 0 8px;
+            transition: color 0.2s ease, text-decoration 0.2s ease;
+        }
+        .site-footer a:hover {
+            color: var(--accent2);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 800px) {
+          .nav-btn .btn-text, .toggle-btn .btn-text { display: none; }
+          .nav-controls { gap: 0.5rem; }
+        }
+        @media (max-width: 768px) {
+          .nav-container {
+              grid-template-columns: 1fr;
+              justify-items: center;
+              gap: 12px;
+          }
+          .logo, .nav-controls, .nav-search {
+              grid-column: 1 / -1;
+              justify-self: center;
+          }
+          .nav-search {
+              justify-self: stretch; 
+              width: 80%;
+              margin: 0 auto;
+          }
+        }
+    </style>
+</head>
+
+<body>
+<nav class="site-nav">
+    <div class="nav-container">
+        <a class="logo" href="Landing_Page.html">EcoGauge</a>
+        <div class="nav-controls">
+            <div class="toggle-btn-group">
+                <a href="AQI_Home.html" class="toggle-btn"><i class='bx bx-wind'></i><span class="btn-text">AQI</span></a>
+                <a href="#" class="toggle-btn active"><i class='bx bxs-volume-full'></i><span class="btn-text">Noise</span></a>
+            </div>
+            <a class="nav-btn" href="NPI_Map.html" role="button" title="Map View">
+                <i class='bx bxs-map'></i> <span class="btn-text">Map</span>
+            </a>
+            <a class="nav-btn" href="NPI_Ranking.html" role="button" title="View Rankings">
+                <i class='bx bxs-bar-chart-alt-2'></i> <span class="btn-text">Rankings</span>
+            </a>
+        </div>
+        <div class="nav-search">
+            <form class="d-flex search-form" id="searchForm">
+                <input class="form-control" type="search" placeholder="Search City..." id="citySearch">
+                <button type="submit"><i class='bx bx-search-alt-2'></i></button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <header class="hero-header">
+        <img src="https://static.toiimg.com/thumb/msid-105136821,width-1280,height-720,resizemode-72/105136821.jpg"
+             alt="Busy city street with traffic" class="hero-image">
+        <div class="hero-overlay">
+            <h1 class="hero-title">Welcome to EcoGauge</h1>
+            <p class="hero-subtitle">Your real-time guide to air quality and noise levels in your city.</p>
+        </div>
+    </header>
+
+    <div class="content-box">
+        <div class="live-npi-container">
+            <h2 id="npi-city-name">Dadar</h2>
+            <div class="npi-main-info">
+                <div id="npi-live-value" class="npi-value">-- <small>dB</small></div>
+                <div class="npi-status-wrapper">
+                    <span>Noise Level is</span>
+                    <div id="npi-live-status" class="npi-status-box">Loading...</div>
+                </div>
+            </div>
+            <div class="noise-source-info">
+                <span><strong>Main Sources:</strong> <span id="noise-sources">Traffic, Crowds, Construction</span></span>
+            </div>
+            <div class="npi-scale-wrapper">
+                <div class="npi-scale">
+                    <div class="npi-scale-segment" style="width: 35.7%; background-color: var(--quiet);"></div> 
+                    <div class="npi-scale-segment" style="width: 14.3%; background-color: var(--moderate);"></div>
+                    <div class="npi-scale-segment" style="width: 14.3%; background-color: var(--loud);"></div>
+                    <div class="npi-scale-segment" style="width: 14.3%; background-color: var(--very-loud);"></div>
+                    <div class="npi-scale-segment" style="width: 21.4%; background-color: var(--harmful);"></div>
+                </div>
+                <div id="npi-pointer" class="npi-scale-pointer" style="left: 0%;"></div>
+                <div class="npi-scale-labels">
+                    <span style="left: 0%;">0</span>
+                    <span style="left: 35.7%;">50</span>
+                    <span style="left: 50%;">70</span>
+                    <span style="left: 64.3%;">90</span>
+                    <span style="left: 78.6%;">110</span>
+                    <span style="left: 100%;">140</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-box">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart-header">
+                    <h4><span id="chart-timeframe-title">Weekly</span> NPI Trend</h4>
+                </div>
+                <div class="d-flex justify-content-center flex-wrap gap-3 mb-4" id="timeframe-selector">
+                    <button class="filter-btn-separate timeframe-btn" data-timeframe="1D">1D</button>
+                    <button class="filter-btn-separate timeframe-btn active" data-timeframe="1W">1W</button>
+                    <button class="filter-btn-separate timeframe-btn" data-timeframe="1M">1M</button>
+                    <button class="filter-btn-separate timeframe-btn" data-timeframe="1Y">1Y</button>
+                    <button class="filter-btn-separate timeframe-btn" data-timeframe="10Y">10Y</button>
+                </div>
+                <canvas id="npiTrendChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-box">
+        <div class="container">
+            <h1 class="text-center mb-4">Decoding the <span class="gradient-text">Noise We Hear</span></h1>
+            <div class="d-flex justify-content-center flex-wrap gap-3 mb-4" role="group" id="edu-toggle-group">
+                <button type="button" class="filter-btn-separate edu-toggle-btn active" data-target="causes">Causes</button>
+                <button type="button" class="filter-btn-separate edu-toggle-btn" data-target="effects">Effects</button>
+                <button type="button" class="filter-btn-separate edu-toggle-btn" data-target="solutions">Solutions</button>
+            </div>
+
+            <div id="causes" class="edu-section active">
+                <h2>1. What is Noise Pollution?</h2>
+                <ul>
+                    <li>Exposure to elevated sound levels that can lead to adverse effects in humans or other living organisms.</li>
+                    <li>Unlike air or water pollution, noise is transient and its effects can be both immediate and long-term.</li>
+                </ul>
+                <h2>2. What are Decibels (dB)?</h2>
+                <ul>
+                    <li>The decibel is the unit used to measure the intensity of a sound.</li>
+                    <li>The scale is logarithmic, meaning a 10 dB increase represents a 10-fold increase in sound intensity.</li>
+                </ul>
+                <h3>Common Sound Levels</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Decibels (dB)</th>
+                            <th>Source</th>
+                            <th>Perceived Loudness</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>0 - 30</td>
+                            <td>Whisper, Quiet Library</td>
+                            <td style="background-color: var(--quiet); color: black;">Faint</td>
+                        </tr>
+                        <tr>
+                            <td>31 - 60</td>
+                            <td>Normal Conversation</td>
+                            <td style="background-color: var(--moderate); color: black;">Moderate</td>
+                        </tr>
+                        <tr>
+                            <td>61 - 85</td>
+                            <td>Heavy City Traffic, Factory Machinery</td>
+                            <td style="background-color: var(--loud); color: black;">Loud</td>
+                        </tr>
+                        <tr>
+                            <td>86 - 110</td>
+                            <td>Rock Concert, Power Saw</td>
+                            <td style="background-color: var(--very-loud); color: white;">Very Loud</td>
+                        </tr>
+                        <tr>
+                            <td>111 - 140+</td>
+                            <td>Jet Engine at Takeoff</td>
+                            <td style="background-color: var(--harmful); color: white;">Painful/Harmful</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h2>3. Causes of Noise Pollution</h2>
+                <ul>
+                    <li><strong>Transportation:</strong> Cars, motorcycles, trains, and airplanes are the largest contributors in urban areas.</li>
+                    <li><strong>Construction:</strong> Heavy machinery, drilling, and other construction activities.</li>
+                    <li><strong>Industrial Sources:</strong> Factories, power plants, and processing mills.</li>
+                    <li><strong>Social & Recreational Events:</strong> Concerts, public events, loudspeakers, and fireworks.</li>
+                </ul>
+            </div>
+
+            <div id="effects" class="edu-section">
+                <h2>4. Effects on Human Health</h2>
+                <ul>
+                    <li><strong>Hearing Problems:</strong> Tinnitus (ringing in ears) and permanent hearing loss from prolonged exposure to loud sounds.</li>
+                    <li><strong>Cardiovascular Issues:</strong> High blood pressure, stress, and increased risk of heart problems.</li>
+                    <li><strong>Sleep Disturbances:</strong> Difficulty falling asleep, frequent awakenings, leading to fatigue and reduced performance.</li>
+                     <li><strong>Mental Health:</strong> Increased anxiety, irritability, and stress.</li>
+                </ul>
+                <h2>5. Effects on Wildlife</h2>
+                <ul>
+                    <li>Disruption of communication and navigation for animals, especially birds and marine life.</li>
+                    <li>Interference with predator-prey detection and avoidance.</li>
+                    <li>Can force species to abandon their habitats.</li>
+                </ul>
+            </div>
+
+            <div id="solutions" class="edu-section">
+                <h2>6. Real-Life Solutions</h2>
+                <h3>Individual Level</h3>
+                <ul>
+                    <li>Use hearing protection like earplugs or noise-canceling headphones in loud environments.</li>
+                    <li>Choose quieter home appliances and maintain vehicles properly.</li>
+                    <li>Soundproof rooms with heavy curtains, rugs, and double-paned windows.</li>
+                </ul>
+                <h3>Community Level</h3>
+                <ul>
+                    <li>Construction of noise barriers along major highways.</li>
+                    <li>Establishing designated "Quiet Zones" around schools and hospitals.</li>
+                    <li>Promoting green spaces, as trees and shrubs can absorb sound.</li>
+                </ul>
+                <h3>Government Level</h3>
+                <ul>
+                    <li>Enforcing noise ordinances and regulations for traffic, construction, and industries.</li>
+                    <li>Investing in quieter public transportation, like electric buses.</li>
+                    <li>Implementing better urban planning to separate residential areas from major noise sources.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>&copy; 2025 EcoGauge. All Rights Reserved.</p>
+    <p>
+        <a href="About_Us.html">About Us</a> |
+        <a href="Contact_Us.html">Contact</a> |
+        <a href="#">Privacy Policy</a>
+    </p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const rootStyles = getComputedStyle(document.documentElement);
+
+        const updateNpiData = () => {
+            const staticDb = 78;
+
+            document.getElementById('npi-live-value').innerHTML = `${staticDb} <small>dB</small>`;
+
+            const statusBox = document.getElementById('npi-live-status');
+            let statusInfo = { text: 'Unknown', color: '#30363d', textColor: 'white' };
+            if (staticDb <= 50) statusInfo = { text: 'Quiet', color: rootStyles.getPropertyValue('--quiet').trim(), textColor: 'black' };
+            else if (staticDb <= 70) statusInfo = { text: 'Moderate', color: rootStyles.getPropertyValue('--moderate').trim(), textColor: 'black' };
+            else if (staticDb <= 90) statusInfo = { text: 'Loud', color: rootStyles.getPropertyValue('--loud').trim(), textColor: 'black' };
+            else if (staticDb <= 110) statusInfo = { text: 'Very Loud', color: rootStyles.getPropertyValue('--very-loud').trim(), textColor: 'white' };
+            else statusInfo = { text: 'Harmful', color: rootStyles.getPropertyValue('--harmful').trim(), textColor: 'white' };
+
+            statusBox.textContent = statusInfo.text;
+            statusBox.style.backgroundColor = statusInfo.color;
+            statusBox.style.color = statusInfo.textColor;
+
+            const pointer = document.getElementById('npi-pointer');
+            const dbPercentage = Math.min(staticDb / 140, 1) * 100;
+            pointer.style.left = `${dbPercentage}%`;
+        };
+
+        updateNpiData();
+
+        const eduToggleButtons = document.querySelectorAll('.edu-toggle-btn');
+        const eduSections = document.querySelectorAll('.edu-section');
+        eduToggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                eduToggleButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                const targetId = this.getAttribute('data-target');
+                eduSections.forEach(section => {
+                    section.classList.toggle('active', section.id === targetId);
+                });
+            });
+        });
+
+        const chartFontColor = rootStyles.getPropertyValue('--text').trim();
+        const chartGridColor = 'rgba(193, 209, 217, 0.2)';
+        const chartAccentColor = rootStyles.getPropertyValue('--accent1').trim();
+
+        const npiTrendCtx = document.getElementById('npiTrendChart').getContext('2d');
+        let npiTrendChart = new Chart(npiTrendCtx, {});
+
+        const timeframeData = {
+            '1D': { labels: ['12am', '3am', '6am', '9am', '12pm', '3pm', '6pm', '9pm'], data: [55, 52, 65, 78, 82, 79, 85, 70] },
+            '1W': { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], data: [75, 79, 78, 81, 84, 86, 76] },
+            '1M': { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], data: [78, 80, 77, 81] },
+            '1Y': { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], data: [75, 78, 80, 82, 81, 79, 78, 79, 83, 85, 82, 79] },
+            '10Y': { labels: ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'], data: [72, 74, 75, 78, 76, 79, 80, 82, 81, 78] }
+        };
+
+        const timeframeTitles = { '1D': 'Daily', '1W': 'Weekly', '1M': 'Monthly', '1Y': 'Yearly', '10Y': 'Decadal' };
+
+        const updateChart = (timeframe) => {
+            const chartTitleSpan = document.getElementById('chart-timeframe-title');
+            chartTitleSpan.textContent = timeframeTitles[timeframe];
+            chartTitleSpan.classList.add('flipping');
+            setTimeout(() => chartTitleSpan.classList.remove('flipping'), 600);
+
+            const newData = timeframeData[timeframe];
+            if (npiTrendChart) npiTrendChart.destroy();
+
+            npiTrendChart = new Chart(npiTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: newData.labels,
+                    datasets: [{
+                        label: 'Avg dB',
+                        data: newData.data,
+                        borderColor: chartAccentColor,
+                        backgroundColor: 'rgba(41, 182, 246, 0.2)',
+                        fill: true,
+                        tension: 0.1,
+                        pointBackgroundColor: 'white',
+                        pointBorderColor: chartAccentColor,
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        pointHoverBackgroundColor: chartAccentColor,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: false, ticks: { color: chartFontColor }, grid: { color: chartGridColor }, title: { display: true, text: 'Decibels (dB)', color: chartFontColor } },
+                        x: { ticks: { color: chartFontColor }, grid: { color: chartGridColor } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Avg Noise: ${context.parsed.y} dB`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        };
+
+        const timeframeButtons = document.querySelectorAll('.timeframe-btn');
+        timeframeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                timeframeButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                updateChart(this.getAttribute('data-timeframe'));
+            });
+        });
+
+        updateChart('1W');
+    });
+</script>
+</body>
+
+</html>
+
+
